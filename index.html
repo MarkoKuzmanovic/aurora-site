@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Aurora Corporation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@200;400&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -39,8 +42,13 @@
     .progress-dot {
       width: 2px;
       height: 32px;
-      background: rgba(255, 255, 255, 0.2);
-      transition: background 0.5s ease;
+      background: rgba(255, 255, 255, 0.3);
+      transition: background 0.3s ease, transform 0.15s ease, height 0.15s ease;
+      cursor: pointer;
+    }
+
+    .progress-dot:active {
+      transform: scale(1.15);
     }
 
     .progress-dot.active {
@@ -66,7 +74,7 @@
     }
 
     .scroll-hint span {
-      color: rgba(255, 255, 255, 0.4);
+      color: rgba(255, 255, 255, 0.5);
       font-size: 12px;
       letter-spacing: 0.3em;
       text-transform: uppercase;
@@ -75,7 +83,7 @@
     .scroll-hint-line {
       width: 1px;
       height: 32px;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), transparent);
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), transparent);
       animation: pulse 2s infinite;
     }
 
@@ -105,7 +113,7 @@
       padding: 0 32px;
     }
 
-    /* Section content transitions - smoother */
+    /* Section content transitions */
     .section-content {
       transition: opacity 1.2s cubic-bezier(0.45, 0, 0.15, 1), transform 1.2s cubic-bezier(0.45, 0, 0.15, 1);
       opacity: 0;
@@ -127,8 +135,9 @@
       color: #fff;
       font-size: clamp(48px, 10vw, 96px);
       letter-spacing: 0.3em;
-      font-weight: 200;
+      font-weight: 400;
       text-transform: uppercase;
+      font-family: 'Atkinson Hyperlegible Mono', monospace;
     }
 
     .intro-divider {
@@ -142,7 +151,7 @@
 
     .intro-content p {
       margin-top: 24px;
-      color: rgba(255, 255, 255, 0.3);
+      color: rgba(255, 255, 255, 0.45);
       font-size: 14px;
       letter-spacing: 0.5em;
       text-transform: uppercase;
@@ -161,12 +170,13 @@
     }
 
     .identity-content .tagline {
-      color: rgba(255, 255, 255, 0.6);
+      color: rgba(255, 255, 255, 0.75);
       font-size: clamp(18px, 3vw, 21px);
       line-height: 1.6;
       letter-spacing: 0.05em;
       text-align: center;
-      font-weight: 300;
+      font-weight: 200;
+      font-family: 'Atkinson Hyperlegible Mono', monospace;
     }
 
     .identity-stats {
@@ -181,7 +191,7 @@
     }
 
     .stat-label {
-      color: rgba(255, 255, 255, 0.2);
+      color: rgba(255, 255, 255, 0.35);
       font-size: 12px;
       letter-spacing: 0.3em;
       text-transform: uppercase;
@@ -189,9 +199,10 @@
     }
 
     .stat-value {
-      color: rgba(255, 255, 255, 0.5);
+      color: rgba(255, 255, 255, 0.65);
       font-size: 24px;
       font-weight: 200;
+      font-family: 'Atkinson Hyperlegible Mono', monospace;
     }
 
     /* Section 3: Signal */
@@ -210,7 +221,7 @@
 
     .ring {
       position: absolute;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 50%;
       animation: ping 3s cubic-bezier(0, 0, 0.2, 1) infinite;
     }
@@ -252,7 +263,7 @@
     }
 
     .signal-text p {
-      color: rgba(255, 255, 255, 0.4);
+      color: rgba(255, 255, 255, 0.55);
       font-size: 14px;
       letter-spacing: 0.4em;
       text-transform: uppercase;
@@ -271,21 +282,26 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      animation: pulse 2s infinite;
+      background: rgba(255, 255, 255, 0.1);
     }
 
     .signal-dot:nth-child(1) {
-      background: rgba(255, 255, 255, 0.5);
+      animation: blink 1.5s infinite;
     }
 
     .signal-dot:nth-child(2) {
-      background: rgba(255, 255, 255, 0.3);
-      animation-delay: 0.3s;
+      animation: blink 1.5s infinite;
+      animation-delay: 0.5s;
     }
 
     .signal-dot:nth-child(3) {
-      background: rgba(255, 255, 255, 0.1);
-      animation-delay: 0.6s;
+      animation: blink 1.5s infinite;
+      animation-delay: 1s;
+    }
+
+    @keyframes blink {
+      0%, 100% { background: rgba(255, 255, 255, 0.1); }
+      33% { background: rgba(255, 255, 255, 0.6); }
     }
 
     /* Section 4: Contact */
@@ -294,7 +310,7 @@
     }
 
     .contact-label {
-      color: rgba(255, 255, 255, 0.2);
+      color: rgba(255, 255, 255, 0.35);
       font-size: 12px;
       letter-spacing: 0.5em;
       text-transform: uppercase;
@@ -302,12 +318,12 @@
     }
 
     .contact-email {
-      color: rgba(255, 255, 255, 0.6);
+      color: rgba(255, 255, 255, 0.75);
       font-size: 18px;
       letter-spacing: 0.1em;
       font-family: monospace;
       text-decoration: none;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
       padding-bottom: 4px;
       transition: color 0.5s ease, border-color 0.5s ease;
     }
@@ -325,7 +341,7 @@
     }
 
     .social-links a {
-      color: rgba(255, 255, 255, 0.2);
+      color: rgba(255, 255, 255, 0.35);
       font-size: 12px;
       letter-spacing: 0.3em;
       text-transform: uppercase;
@@ -334,14 +350,107 @@
     }
 
     .social-links a:hover {
-      color: rgba(255, 255, 255, 0.6);
+      color: rgba(255, 255, 255, 0.75);
     }
 
     .copyright {
       margin-top: 96px;
-      color: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.2);
       font-size: 12px;
       letter-spacing: 0.3em;
+    }
+
+    /* Mobile styles */
+    @media (max-width: 768px) {
+      .progress-indicator {
+        right: 16px;
+      }
+
+      section {
+        padding: 0 24px;
+      }
+
+      .intro-content h1 {
+        letter-spacing: 0.15em;
+      }
+
+      .intro-content p {
+        letter-spacing: 0.2em;
+        font-size: 12px;
+      }
+
+      .identity-content .tagline {
+        font-size: 16px;
+        letter-spacing: 0.02em;
+      }
+
+      .identity-stats {
+        gap: 32px;
+      }
+
+      .stat-label {
+        letter-spacing: 0.15em;
+        font-size: 10px;
+      }
+
+      .stat-value {
+        font-size: 18px;
+      }
+
+      .signal-text p {
+        letter-spacing: 0.2em;
+        font-size: 12px;
+      }
+
+      .contact-label {
+        letter-spacing: 0.2em;
+        font-size: 10px;
+      }
+
+      .contact-email {
+        font-size: 14px;
+        letter-spacing: 0.05em;
+      }
+
+      .social-links {
+        gap: 24px;
+      }
+
+      .social-links a {
+        letter-spacing: 0.15em;
+        font-size: 10px;
+      }
+
+      .copyright {
+        letter-spacing: 0.15em;
+        font-size: 10px;
+      }
+
+      .scroll-hint span {
+        letter-spacing: 0.15em;
+        font-size: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .intro-content h1 {
+        letter-spacing: 0.1em;
+        font-size: clamp(36px, 12vw, 60px);
+      }
+
+      .identity-stats {
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .contact-email {
+        font-size: 12px;
+      }
+
+      .social-links {
+        flex-direction: column;
+        gap: 16px;
+      }
     }
   </style>
 </head>
@@ -430,57 +539,114 @@
   </div>
 
   <script>
-    const scrollContainer = document.querySelector('.scroll-container');
-    const sections = document.querySelectorAll('section');
-    const sectionContents = document.querySelectorAll('.section-content');
-    const progressDots = document.querySelectorAll('.progress-dot');
-    const scrollHint = document.querySelector('.scroll-hint');
+    (function() {
+      var scrollContainer = document.querySelector('.scroll-container');
+      var sections = document.querySelectorAll('section');
+      var sectionContents = document.querySelectorAll('.section-content');
+      var progressDots = document.querySelectorAll('.progress-dot');
+      var scrollHint = document.querySelector('.scroll-hint');
+      var progressIndicator = document.querySelector('.progress-indicator');
 
-    let activeSection = 0;
+      var activeSection = 0;
 
-    // Initial load animation for first section
-    window.addEventListener('load', () => {
-      sectionContents[0].classList.add('visible');
-    });
+      // Initial load animation for first section
+      window.addEventListener('load', function() {
+        sectionContents[0].classList.add('visible');
+      });
 
-    scrollContainer.addEventListener('scroll', () => {
-      const scrollTop = scrollContainer.scrollTop;
-      const sectionHeight = scrollContainer.clientHeight;
-      const scrollHeight = scrollContainer.scrollHeight - sectionHeight;
-      const scrollProgress = scrollTop / scrollHeight;
-
-      // Calculate active section
-      const newActiveSection = Math.round(scrollTop / sectionHeight);
-
-      if (newActiveSection !== activeSection) {
-        activeSection = newActiveSection;
-
-        // Update section visibility
-        sectionContents.forEach((content, i) => {
-          if (i === activeSection) {
-            content.classList.add('visible');
-          } else {
-            content.classList.remove('visible');
-          }
-        });
-
-        // Update progress dots
-        progressDots.forEach((dot, i) => {
-          if (i === activeSection) {
-            dot.classList.add('active');
-          } else {
-            dot.classList.remove('active');
-          }
-        });
+      // Click handlers for progress dots
+      for (var i = 0; i < progressDots.length; i++) {
+        (function(index) {
+          progressDots[index].addEventListener('click', function() {
+            sections[index].scrollIntoView({ behavior: 'smooth' });
+          });
+        })(i);
       }
 
-      // Hide scroll hint after scrolling
-      if (scrollProgress > 0.05) {
-        scrollHint.classList.add('hidden');
-      } else {
-        scrollHint.classList.remove('hidden');
-      }
-    });
+      // Proximity-based hover effect for progress dots
+      document.addEventListener('mousemove', function(e) {
+        var indicatorRect = progressIndicator.getBoundingClientRect();
+        var mouseX = e.clientX;
+        var mouseY = e.clientY;
+        
+        var distanceFromIndicator = Math.abs(mouseX - indicatorRect.left);
+        
+        if (distanceFromIndicator < 100) {
+          for (var j = 0; j < progressDots.length; j++) {
+            var dot = progressDots[j];
+            var dotRect = dot.getBoundingClientRect();
+            var dotCenterY = dotRect.top + dotRect.height / 2;
+            var dotCenterX = dotRect.left + dotRect.width / 2;
+            
+            var distanceY = Math.abs(mouseY - dotCenterY);
+            var distanceX = Math.abs(mouseX - dotCenterX);
+            var distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+            
+            var maxDistance = 80;
+            var minHeight = 32;
+            var maxHeight = 44;
+            
+            if (distance < maxDistance) {
+              var factor = 1 - (distance / maxDistance);
+              var newHeight = minHeight + (maxHeight - minHeight) * factor;
+              var brightnessBoost = factor * 0.3;
+              
+              dot.style.height = newHeight + 'px';
+              if (!dot.classList.contains('active')) {
+                dot.style.background = 'rgba(255, 255, 255, ' + (0.3 + brightnessBoost) + ')';
+              }
+            } else {
+              dot.style.height = minHeight + 'px';
+              if (!dot.classList.contains('active')) {
+                dot.style.background = 'rgba(255, 255, 255, 0.3)';
+              }
+            }
+          }
+        } else {
+          for (var k = 0; k < progressDots.length; k++) {
+            progressDots[k].style.height = '32px';
+            if (!progressDots[k].classList.contains('active')) {
+              progressDots[k].style.background = 'rgba(255, 255, 255, 0.3)';
+            }
+          }
+        }
+      });
+
+      scrollContainer.addEventListener('scroll', function() {
+        var scrollTop = scrollContainer.scrollTop;
+        var sectionHeight = scrollContainer.clientHeight;
+        var scrollHeight = scrollContainer.scrollHeight - sectionHeight;
+        var scrollProgress = scrollTop / scrollHeight;
+
+        var newActiveSection = Math.round(scrollTop / sectionHeight);
+
+        if (newActiveSection !== activeSection) {
+          activeSection = newActiveSection;
+
+          for (var m = 0; m < sectionContents.length; m++) {
+            if (m === activeSection) {
+              sectionContents[m].classList.add('visible');
+            } else {
+              sectionContents[m].classList.remove('visible');
+            }
+          }
+
+          for (var n = 0; n < progressDots.length; n++) {
+            if (n === activeSection) {
+              progressDots[n].classList.add('active');
+            } else {
+              progressDots[n].classList.remove('active');
+            }
+          }
+        }
+
+        if (scrollProgress > 0.05) {
+          scrollHint.classList.add('hidden');
+        } else {
+          scrollHint.classList.remove('hidden');
+        }
+      });
+    })();
   </script>
 </body>
 </html>

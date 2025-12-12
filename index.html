@@ -16,46 +16,76 @@
 
     html, body {
       height: 100%;
+      width: 100%; /* Ensure full width for centering */
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #050505; /* Set background to match previous changes */
+      color: #fff;
+      overflow: hidden; /* Custom scroll engine */
+    }
+
+    /* VIBE & EFFECTS (Restored from the version with fixes) */
+    
+    .cursor-spotlight {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.015) 0%, transparent 60%);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 1;
+      transition: opacity 0.5s ease;
     }
 
     .container {
       position: relative;
       width: 100%;
       height: 100vh;
-      background: #000;
-      overflow: hidden;
+      z-index: 2;
     }
 
-    /* Progress indicator */
+    /* NAVIGATION */
+    
     .progress-indicator {
       position: fixed;
-      right: 32px;
+      right: 40px;
       top: 50%;
       transform: translateY(-50%);
-      z-index: 40;
+      z-index: 50;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 16px;
+      padding: 20px 0;
     }
 
     .progress-dot {
       width: 2px;
       height: 32px;
-      background: rgba(255, 255, 255, 0.3);
-      transition: background 0.3s ease, transform 0.15s ease, height 0.15s ease;
+      background: rgba(255, 255, 255, 0.2);
       cursor: pointer;
+      position: relative;
+      border-radius: 2px;
+      transition: background 0.3s ease;
     }
 
-    .progress-dot:active {
-      transform: scale(1.15);
+    .progress-dot::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 100%;
     }
 
     .progress-dot.active {
       background: #fff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     }
 
-    /* Scroll hint */
+    /* SCROLL HINT */
+
     .scroll-hint {
       position: fixed;
       bottom: 32px;
@@ -66,154 +96,181 @@
       flex-direction: column;
       align-items: center;
       gap: 8px;
-      transition: opacity 1s ease;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      pointer-events: none;
     }
 
     .scroll-hint.hidden {
       opacity: 0;
+      transform: translateX(-50%) translateY(20px);
     }
 
     .scroll-hint span {
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 12px;
-      letter-spacing: 0.3em;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 10px;
+      letter-spacing: 0.4em;
       text-transform: uppercase;
+      font-family: 'Atkinson Hyperlegible Mono', monospace;
     }
 
     .scroll-hint-line {
       width: 1px;
-      height: 32px;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), transparent);
-      animation: pulse 2s infinite;
+      height: 48px;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), transparent);
+      animation: pulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
+      0% { opacity: 0; transform: scaleY(0); transform-origin: top; }
+      50% { opacity: 1; transform: scaleY(1); transform-origin: top; }
+      51% { opacity: 1; transform: scaleY(1); transform-origin: bottom; }
+      100% { opacity: 0; transform: scaleY(0); transform-origin: bottom; }
     }
 
-    /* Main scroll container */
+    /* MAIN CONTENT */
+
     .scroll-container {
       width: 100%;
       height: 100%;
-      overflow-y: auto;
-      scroll-snap-type: y mandatory;
-      scroll-behavior: smooth;
+      overflow: hidden;
     }
 
-    /* Sections */
     section {
       width: 100%;
       height: 100vh;
-      scroll-snap-align: start;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
-      padding: 0 32px;
+      padding: 0 20px;
     }
 
-    /* Section content transitions */
     .section-content {
-      transition: opacity 1.2s cubic-bezier(0.45, 0, 0.15, 1), transform 1.2s cubic-bezier(0.45, 0, 0.15, 1);
+      transition: opacity 1s ease, transform 1s cubic-bezier(0.2, 1, 0.3, 1);
       opacity: 0;
-      transform: translateY(30px);
+      transform: translateY(40px) scale(0.98);
+      will-change: transform, opacity;
     }
 
     .section-content.visible {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
     }
 
-    /* Section 1: Intro */
+    /* INTRO */
+
     .intro-content {
       text-align: center;
-      transition-delay: 0.3s;
+      z-index: 10;
     }
 
     .intro-content h1 {
       color: #fff;
-      font-size: clamp(48px, 10vw, 96px);
-      letter-spacing: 0.3em;
+      font-size: clamp(48px, 9vw, 110px);
+      letter-spacing: 0.25em;
       font-weight: 400;
       text-transform: uppercase;
       font-family: 'Atkinson Hyperlegible Mono', monospace;
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+      margin: 0;
+      line-height: 1.1;
     }
 
     .intro-divider {
-      margin-top: 16px;
+      margin: 24px auto;
       height: 1px;
-      width: 96px;
-      margin-left: auto;
-      margin-right: auto;
-      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5), transparent);
+      width: 120px;
+      background: linear-gradient(to right, transparent, #fff, transparent);
+      opacity: 0.6;
     }
 
     .intro-content p {
-      margin-top: 24px;
-      color: rgba(255, 255, 255, 0.45);
-      font-size: 14px;
-      letter-spacing: 0.5em;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 13px;
+      letter-spacing: 0.6em;
       text-transform: uppercase;
       font-family: monospace;
     }
 
-    .intro-content .intro-the {
-      margin-top: 0;
-      margin-bottom: 8px;
-    }
+    /* IDENTITY */
 
-    /* Section 2: Identity */
     .identity-content {
-      max-width: 640px;
+      max-width: 800px;
       margin: 0 auto;
+      width: 100%;
     }
 
     .identity-content .tagline {
-      color: rgba(255, 255, 255, 0.75);
-      font-size: clamp(18px, 3vw, 21px);
-      line-height: 1.6;
+      color: #eee;
+      font-size: clamp(20px, 4vw, 28px);
+      line-height: 1.5;
       letter-spacing: 0.05em;
       text-align: center;
       font-weight: 200;
       font-family: 'Atkinson Hyperlegible Mono', monospace;
+      margin-bottom: 64px;
+      text-shadow: 0 0 15px rgba(255,255,255,0.2);
     }
 
     .identity-stats {
-      margin-top: 48px;
       display: flex;
       justify-content: center;
-      gap: 64px;
+      gap: clamp(40px, 10vw, 120px);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 48px;
     }
 
     .stat {
       text-align: center;
+      position: relative;
+    }
+
+    .stat::after {
+      content: '';
+      position: absolute;
+      top: -53px;
+      left: 50%;
+      width: 1px;
+      height: 10px;
+      background: rgba(255,255,255,0.3);
     }
 
     .stat-label {
-      color: rgba(255, 255, 255, 0.35);
-      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 11px;
       letter-spacing: 0.3em;
       text-transform: uppercase;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
 
     .stat-value {
-      color: rgba(255, 255, 255, 0.65);
+      color: #fff;
       font-size: 24px;
       font-weight: 200;
       font-family: 'Atkinson Hyperlegible Mono', monospace;
     }
 
-    /* Section 3: Signal */
+    /* SIGNAL */
+
     .signal-content {
       text-align: center;
       position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
     .signal-rings {
       position: absolute;
-      inset: 0;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -221,258 +278,191 @@
 
     .ring {
       position: absolute;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 50%;
-      animation: ping 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+      animation: ping 4s cubic-bezier(0, 0, 0.2, 1) infinite;
     }
 
-    .ring:nth-child(1) {
-      width: 128px;
-      height: 128px;
-    }
-
-    .ring:nth-child(2) {
-      width: 192px;
-      height: 192px;
-      animation-duration: 4s;
-      animation-delay: 0.5s;
-    }
-
-    .ring:nth-child(3) {
-      width: 256px;
-      height: 256px;
-      animation-duration: 5s;
-      animation-delay: 1s;
-    }
+    .ring:nth-child(1) { width: 200px; height: 200px; }
+    .ring:nth-child(2) { width: 350px; height: 350px; animation-delay: 1s; }
+    .ring:nth-child(3) { width: 500px; height: 500px; animation-delay: 2s; border-color: rgba(255,255,255,0.04); }
 
     @keyframes ping {
-      0% {
-        transform: scale(1);
-        opacity: 1;
-      }
-      75%, 100% {
-        transform: scale(1.5);
-        opacity: 0;
-      }
+      0% { transform: scale(0.8); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: scale(1.4); opacity: 0; }
     }
 
     .signal-text {
       position: relative;
       z-index: 10;
-      padding: 96px 0;
+      padding: 0;
     }
 
     .signal-text p {
-      color: rgba(255, 255, 255, 0.55);
+      color: rgba(255, 255, 255, 0.7);
       font-size: 14px;
       letter-spacing: 0.4em;
       text-transform: uppercase;
       font-family: monospace;
+      text-shadow: 0 0 10px rgba(0,0,0,0.8);
     }
 
     .signal-dots {
-      margin-top: 32px;
+      margin-top: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 16px;
+      gap: 12px;
     }
 
     .signal-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.1);
+      width: 6px;
+      height: 6px;
+      background: #fff;
+      opacity: 0.2;
     }
 
-    .signal-dot:nth-child(1) {
-      animation: blink 1.5s infinite;
-    }
+    .signal-dot:nth-child(1) { animation: flash 2s infinite; }
+    .signal-dot:nth-child(2) { animation: flash 2s infinite 0.2s; }
+    .signal-dot:nth-child(3) { animation: flash 2s infinite 0.4s; }
 
-    .signal-dot:nth-child(2) {
-      animation: blink 1.5s infinite;
-      animation-delay: 0.5s;
-    }
-
-    .signal-dot:nth-child(3) {
-      animation: blink 1.5s infinite;
-      animation-delay: 1s;
-    }
-
-    @keyframes blink {
-      0%, 100% { background: rgba(255, 255, 255, 0.1); }
-      33% { background: rgba(255, 255, 255, 0.6); }
+    @keyframes flash {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      10% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px #fff; }
     }
 
     /* Section 4: Contact */
+
     .contact-content {
-      text-align: center;
+      text-align: center; /* Ensures inline-block child is centered */
+      width: auto;
+      max-width: none;
+      margin: 0 auto;
     }
 
     .contact-label {
-      color: rgba(255, 255, 255, 0.35);
-      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 11px;
       letter-spacing: 0.5em;
       text-transform: uppercase;
-      margin-bottom: 32px;
+      margin-bottom: 48px;
     }
 
+    /* EMAIL STYLES - Centering Fix */
     .contact-email {
-      color: rgba(255, 255, 255, 0.75);
-      font-size: 18px;
+      display: inline-block; /* Crucial for centering a block around its content */
+      text-align: center;
+      color: #fff;
+      font-size: clamp(20px, 5vw, 32px);
       letter-spacing: 0.1em;
-      font-family: monospace;
+      font-family: 'Atkinson Hyperlegible Mono', monospace;
       text-decoration: none;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-      padding-bottom: 4px;
-      transition: color 0.5s ease, border-color 0.5s ease;
+      padding: 20px 32px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: linear-gradient(to bottom, transparent 50%, #fff 50%);
+      background-size: 100% 200%;
+      background-position: center top;
+      background-clip: padding-box;
+      transition: all 0.4s ease;
+      white-space: nowrap;
     }
 
     .contact-email:hover {
-      color: #fff;
-      border-color: rgba(255, 255, 255, 0.4);
+      background-position: center bottom;
+      color: #000;
+      border-color: #fff;
     }
 
     .social-links {
       margin-top: 64px;
       display: flex;
       justify-content: center;
-      gap: 32px;
+      gap: 48px;
     }
 
     .social-links a {
-      color: rgba(255, 255, 255, 0.35);
-      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 11px;
       letter-spacing: 0.3em;
       text-transform: uppercase;
       text-decoration: none;
-      transition: color 0.3s ease;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+      position: relative;
+    }
+
+    /* INVISIBLE HIT BOX for easier clicking */
+    .social-links a::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      right: -20px;
+      bottom: -20px;
+      z-index: 10;
+      cursor: pointer;
+    }
+
+    /* Visual underline effect */
+    .social-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 0%;
+      height: 1px;
+      background: #fff;
+      transition: width 0.3s ease;
+      pointer-events: none;
     }
 
     .social-links a:hover {
-      color: rgba(255, 255, 255, 0.75);
+      color: #fff;
+      text-shadow: 0 0 8px rgba(255,255,255,0.6);
+    }
+    
+    .social-links a:hover::after {
+      width: 100%;
     }
 
     .copyright {
       margin-top: 96px;
-      color: rgba(255, 255, 255, 0.2);
-      font-size: 12px;
+      color: rgba(255, 255, 255, 0.15);
+      font-size: 11px;
       letter-spacing: 0.3em;
+      font-family: monospace;
     }
 
-    /* Mobile styles */
     @media (max-width: 768px) {
-      .progress-indicator {
-        right: 16px;
-      }
-
-      section {
-        padding: 0 24px;
-      }
-
-      .intro-content h1 {
-        letter-spacing: 0.15em;
-      }
-
-      .intro-content p {
-        letter-spacing: 0.2em;
-        font-size: 12px;
-      }
-
-      .identity-content .tagline {
-        font-size: 16px;
-        letter-spacing: 0.02em;
-      }
-
-      .identity-stats {
-        gap: 32px;
-      }
-
-      .stat-label {
-        letter-spacing: 0.15em;
-        font-size: 10px;
-      }
-
-      .stat-value {
-        font-size: 18px;
-      }
-
-      .signal-text p {
-        letter-spacing: 0.2em;
-        font-size: 12px;
-      }
-
-      .contact-label {
-        letter-spacing: 0.2em;
-        font-size: 10px;
-      }
-
-      .contact-email {
-        font-size: 14px;
-        letter-spacing: 0.05em;
-      }
-
-      .social-links {
-        gap: 24px;
-      }
-
-      .social-links a {
-        letter-spacing: 0.15em;
-        font-size: 10px;
-      }
-
-      .copyright {
-        letter-spacing: 0.15em;
-        font-size: 10px;
-      }
-
-      .scroll-hint span {
-        letter-spacing: 0.15em;
-        font-size: 10px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .intro-content h1 {
-        letter-spacing: 0.1em;
-        font-size: clamp(36px, 12vw, 60px);
-      }
-
-      .identity-stats {
-        flex-direction: column;
-        gap: 24px;
-      }
-
-      .contact-email {
-        font-size: 12px;
-      }
-
-      .social-links {
-        flex-direction: column;
-        gap: 16px;
-      }
+      .intro-content h1 { letter-spacing: 0.15em; }
+      .identity-stats { flex-direction: column; gap: 32px; }
+      .progress-indicator { display: none; }
+      .scroll-container { overflow-y: auto; scroll-snap-type: y mandatory; }
+      section { scroll-snap-align: start; }
+      .cursor-spotlight { display: none; }
+      .contact-email { font-size: 16px; padding: 16px 20px; }
+      .social-links { gap: 32px; }
     }
   </style>
 </head>
 <body>
+  
+  <div class="cursor-spotlight"></div>
+
   <div class="container">
-    <!-- Progress indicator -->
     <div class="progress-indicator">
-      <div class="progress-dot active" data-section="0"></div>
-      <div class="progress-dot" data-section="1"></div>
-      <div class="progress-dot" data-section="2"></div>
-      <div class="progress-dot" data-section="3"></div>
+      <div class="progress-dot active" data-index="0" data-height="32"></div>
+      <div class="progress-dot" data-index="1" data-height="32"></div>
+      <div class="progress-dot" data-index="2" data-height="32"></div>
+      <div class="progress-dot" data-index="3" data-height="32"></div>
     </div>
 
-    <!-- Scroll hint -->
     <div class="scroll-hint">
       <span>Scroll</span>
       <div class="scroll-hint-line"></div>
     </div>
 
-    <!-- Main scroll container -->
     <div class="scroll-container">
-      <!-- Section 1: Intro -->
       <section id="intro">
         <div class="section-content intro-content">
           <p class="intro-the">The</p>
@@ -482,7 +472,6 @@
         </div>
       </section>
 
-      <!-- Section 2: Identity -->
       <section id="identity">
         <div class="section-content identity-content">
           <p class="tagline">We build worlds that don't exist yet.</p>
@@ -503,7 +492,6 @@
         </div>
       </section>
 
-      <!-- Section 3: Signal -->
       <section id="signal">
         <div class="section-content signal-content">
           <div class="signal-rings">
@@ -522,11 +510,10 @@
         </div>
       </section>
 
-      <!-- Section 4: Contact -->
       <section id="contact">
         <div class="section-content contact-content">
           <div class="contact-label">Establish contact</div>
-          <a href="mailto:signal@auroracorporation.space" class="contact-email">signal@auroracorporation.space</a>
+          <a href="mailto:signal@auroracorporation.space" class="contact-email" onclick="window.location.href='mailto:signal@auroracorporation.space';">signal@auroracorporation.space</a>
           <div class="social-links">
             <a href="#">Twitter</a>
             <a href="#">Discord</a>
@@ -540,112 +527,200 @@
 
   <script>
     (function() {
-      var scrollContainer = document.querySelector('.scroll-container');
-      var sections = document.querySelectorAll('section');
-      var sectionContents = document.querySelectorAll('.section-content');
-      var progressDots = document.querySelectorAll('.progress-dot');
-      var scrollHint = document.querySelector('.scroll-hint');
-      var progressIndicator = document.querySelector('.progress-indicator');
+      const scrollContainer = document.querySelector('.scroll-container');
+      const sections = document.querySelectorAll('section');
+      const sectionContents = document.querySelectorAll('.section-content');
+      const progressDots = document.querySelectorAll('.progress-dot');
+      const scrollHint = document.querySelector('.scroll-hint');
+      const spotlight = document.querySelector('.cursor-spotlight');
 
-      var activeSection = 0;
+      // STATE
+      let activeSection = 0;
+      let lastScrollTime = 0;
+      
+      // MOUSE TRACKING STATE
+      let mouseY = 0;
+      let mouseX = 0;
+      const dotStates = Array.from(progressDots).map(() => ({ currentHeight: 32, targetHeight: 32 }));
 
-      // Initial load animation for first section
-      window.addEventListener('load', function() {
+      // --- 1. INITIALIZATION ---
+      
+      window.addEventListener('load', () => {
         sectionContents[0].classList.add('visible');
       });
 
-      // Click handlers for progress dots
-      for (var i = 0; i < progressDots.length; i++) {
-        (function(index) {
-          progressDots[index].addEventListener('click', function() {
-            sections[index].scrollIntoView({ behavior: 'smooth' });
-          });
-        })(i);
-      }
+      // --- 2. SMOOTH MOUSE SPOTLIGHT ---
 
-      // Proximity-based hover effect for progress dots
-      document.addEventListener('mousemove', function(e) {
-        var indicatorRect = progressIndicator.getBoundingClientRect();
-        var mouseX = e.clientX;
-        var mouseY = e.clientY;
-        
-        var distanceFromIndicator = Math.abs(mouseX - indicatorRect.left);
-        
-        if (distanceFromIndicator < 100) {
-          for (var j = 0; j < progressDots.length; j++) {
-            var dot = progressDots[j];
-            var dotRect = dot.getBoundingClientRect();
-            var dotCenterY = dotRect.top + dotRect.height / 2;
-            var dotCenterX = dotRect.left + dotRect.width / 2;
-            
-            var distanceY = Math.abs(mouseY - dotCenterY);
-            var distanceX = Math.abs(mouseX - dotCenterX);
-            var distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-            
-            var maxDistance = 80;
-            var minHeight = 32;
-            var maxHeight = 44;
-            
-            if (distance < maxDistance) {
-              var factor = 1 - (distance / maxDistance);
-              var newHeight = minHeight + (maxHeight - minHeight) * factor;
-              var brightnessBoost = factor * 0.3;
-              
-              dot.style.height = newHeight + 'px';
-              if (!dot.classList.contains('active')) {
-                dot.style.background = 'rgba(255, 255, 255, ' + (0.3 + brightnessBoost) + ')';
-              }
-            } else {
-              dot.style.height = minHeight + 'px';
-              if (!dot.classList.contains('active')) {
-                dot.style.background = 'rgba(255, 255, 255, 0.3)';
-              }
-            }
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        spotlight.style.left = mouseX + 'px';
+        spotlight.style.top = mouseY + 'px';
+      });
+
+      // --- 3. CUSTOM SCROLL ENGINE ---
+      
+      const scrollSmoothly = (element, targetY, duration) => {
+        const startY = element.scrollTop;
+        const change = targetY - startY;
+        const startTime = performance.now();
+
+        const animateScroll = (currentTime) => {
+          const time = currentTime - startTime;
+          const progress = Math.min(1, time / duration);
+          
+          // Cubic Bezier easing for a smooth feel
+          const ease = progress < 0.5 ? 4 * progress * progress * progress : (progress - 1) * (2 * progress - 2) * (2 * progress - 2) + 1;
+
+          element.scrollTop = startY + change * ease;
+          
+          if (progress < 1) {
+            requestAnimationFrame(animateScroll);
           }
-        } else {
-          for (var k = 0; k < progressDots.length; k++) {
-            progressDots[k].style.height = '32px';
-            if (!progressDots[k].classList.contains('active')) {
-              progressDots[k].style.background = 'rgba(255, 255, 255, 0.3)';
-            }
-          }
+        };
+
+        requestAnimationFrame(animateScroll);
+      };
+
+      window.addEventListener('wheel', (e) => {
+        if (window.innerWidth <= 768) return;
+
+        e.preventDefault();
+        
+        const now = Date.now();
+        if (now - lastScrollTime < 800) return;
+        
+        const direction = e.deltaY > 0 ? 1 : -1;
+        scrollToSection(activeSection + direction);
+        
+        lastScrollTime = now;
+      }, { passive: false });
+
+      window.addEventListener('keydown', (e) => {
+        if (window.innerWidth <= 768) return;
+        const now = Date.now();
+        if (now - lastScrollTime < 500) return;
+
+        if (e.key === 'ArrowDown' || e.key === ' ') {
+          scrollToSection(activeSection + 1);
+          lastScrollTime = now;
+        } else if (e.key === 'ArrowUp') {
+          scrollToSection(activeSection - 1);
+          lastScrollTime = now;
         }
       });
 
-      scrollContainer.addEventListener('scroll', function() {
-        var scrollTop = scrollContainer.scrollTop;
-        var sectionHeight = scrollContainer.clientHeight;
-        var scrollHeight = scrollContainer.scrollHeight - sectionHeight;
-        var scrollProgress = scrollTop / scrollHeight;
+      function scrollToSection(index) {
+        if (index < 0 || index >= sections.length) return;
+        
+        activeSection = index;
+        
+        // Use custom scroll function to target the section position
+        const targetY = sections[index].offsetTop;
+        scrollSmoothly(scrollContainer, targetY, 800);
+        
+        updateSectionStates();
+      }
 
-        var newActiveSection = Math.round(scrollTop / sectionHeight);
-
-        if (newActiveSection !== activeSection) {
-          activeSection = newActiveSection;
-
-          for (var m = 0; m < sectionContents.length; m++) {
-            if (m === activeSection) {
-              sectionContents[m].classList.add('visible');
-            } else {
-              sectionContents[m].classList.remove('visible');
-            }
+      function updateSectionStates() {
+        sectionContents.forEach((content, i) => {
+          if (i === activeSection) {
+            content.classList.add('visible');
+          } else {
+            content.classList.remove('visible');
           }
+        });
 
-          for (var n = 0; n < progressDots.length; n++) {
-            if (n === activeSection) {
-              progressDots[n].classList.add('active');
-            } else {
-              progressDots[n].classList.remove('active');
-            }
+        progressDots.forEach((dot, i) => {
+          if (i === activeSection) {
+            dot.classList.add('active');
+          } else {
+            dot.classList.remove('active');
           }
-        }
+        });
 
-        if (scrollProgress > 0.05) {
+        if (activeSection > 0) {
           scrollHint.classList.add('hidden');
         } else {
           scrollHint.classList.remove('hidden');
         }
+      }
+
+      // --- 4. CLICK NAVIGATION ---
+
+      progressDots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+          scrollToSection(index);
+        });
       });
+
+      // --- 5. SMOOTH DOT HOVER ANIMATION (LERP) ---
+      
+      const lerp = (start, end, factor) => start + (end - start) * factor;
+
+      function animateDots() {
+        const indicatorRect = document.querySelector('.progress-indicator').getBoundingClientRect();
+        const isNear = Math.abs(mouseX - indicatorRect.left) < 150;
+
+        progressDots.forEach((dot, index) => {
+          const state = dotStates[index];
+          let target = 32;
+
+          if (isNear) {
+            const dotRect = dot.getBoundingClientRect();
+            const dotCenterY = dotRect.top + dotRect.height / 2;
+            const distY = Math.abs(mouseY - dotCenterY);
+            
+            if (distY < 100) {
+              const influence = 1 - (distY / 100); 
+              target = 32 + (50 * influence);
+            }
+          }
+
+          state.currentHeight = lerp(state.currentHeight, target, 0.1);
+          dot.style.height = `${state.currentHeight}px`;
+          
+          if (!dot.classList.contains('active')) {
+             const opacity = 0.2 + ((state.currentHeight - 32) / 100);
+             dot.style.backgroundColor = `rgba(255, 255, 255, ${opacity})`;
+          } else {
+             dot.style.backgroundColor = '#fff';
+          }
+        });
+
+        requestAnimationFrame(animateDots);
+      }
+
+      animateDots();
+
+      // Mobile native scroll listener (updates state on touch scroll)
+      scrollContainer.addEventListener('scroll', () => {
+        if (window.innerWidth > 768) return; // Only for mobile
+        
+        const scrollTop = scrollContainer.scrollTop;
+        const sectionHeight = window.innerHeight;
+        const newActive = Math.round(scrollTop / sectionHeight);
+        
+        if (newActive !== activeSection) {
+          activeSection = newActive;
+          updateSectionStates();
+        }
+      });
+      
+      // Update state on resize for correct active section calculation
+      window.addEventListener('resize', () => {
+          // Re-calculate the current active section after a resize
+          const scrollTop = scrollContainer.scrollTop;
+          const sectionHeight = window.innerHeight;
+          const newActive = Math.round(scrollTop / sectionHeight);
+          
+          if (newActive !== activeSection) {
+              activeSection = newActive;
+              updateSectionStates();
+          }
+      });
+
+
     })();
   </script>
 </body>

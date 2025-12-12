@@ -105,11 +105,11 @@
       padding: 0 32px;
     }
 
-    /* Section content transitions */
+    /* Section content transitions - smoother */
     .section-content {
-      transition: opacity 1s ease, transform 1s ease;
+      transition: opacity 1.2s cubic-bezier(0.45, 0, 0.15, 1), transform 1.2s cubic-bezier(0.45, 0, 0.15, 1);
       opacity: 0;
-      transform: translateY(48px);
+      transform: translateY(30px);
     }
 
     .section-content.visible {
@@ -147,6 +147,11 @@
       letter-spacing: 0.5em;
       text-transform: uppercase;
       font-family: monospace;
+    }
+
+    .intro-content .intro-the {
+      margin-top: 0;
+      margin-bottom: 8px;
     }
 
     /* Section 2: Identity */
@@ -361,6 +366,7 @@
       <!-- Section 1: Intro -->
       <section id="intro">
         <div class="section-content intro-content">
+          <p class="intro-the">The</p>
           <h1>Aurora</h1>
           <div class="intro-divider"></div>
           <p>Corporation</p>
@@ -374,11 +380,11 @@
           <div class="identity-stats">
             <div class="stat">
               <div class="stat-label">Founded</div>
-              <div class="stat-value">—</div>
+              <div class="stat-value">Tomorrow</div>
             </div>
             <div class="stat">
               <div class="stat-label">Projects</div>
-              <div class="stat-value">∞</div>
+              <div class="stat-value">12</div>
             </div>
             <div class="stat">
               <div class="stat-label">Status</div>
@@ -411,7 +417,7 @@
       <section id="contact">
         <div class="section-content contact-content">
           <div class="contact-label">Establish contact</div>
-          <a href="mailto:hello@auroracorp.dev" class="contact-email">hello@auroracorp.dev</a>
+          <a href="mailto:signal@auroracorporation.space" class="contact-email">signal@auroracorporation.space</a>
           <div class="social-links">
             <a href="#">Twitter</a>
             <a href="#">Discord</a>

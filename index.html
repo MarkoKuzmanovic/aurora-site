@@ -7,7 +7,6 @@
   <meta name="description" content="Per aspera ad astra. Something is coming.">
   <meta name="theme-color" content="#030308">
   
-  <!-- Favicons -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -16,7 +15,6 @@
   <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
   <link rel="manifest" href="/site.webmanifest">
   
-  <!-- Open Graph / Social -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="The Aurora Corporation">
   <meta property="og:description" content="Per aspera ad astra. Something is coming.">
@@ -74,20 +72,24 @@
     /* LOGO ANIMATION */
     .logo-mark {
       position: fixed;
-      top: 32px;                    /* POSITION: distance from top */
-      left: 40px;                   /* POSITION: distance from left */
+      top: 32px;
+      left: 40px;
       z-index: 100;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 0;
+      cursor: pointer;
     }
 
     .logo-top, .logo-bottom {
-      width: 48px;                  /* SCALE: width of chevrons */
+      width: 48px;
       height: auto;
       opacity: 0;
       will-change: transform, opacity;
+      transition: filter 0.3s ease;
+      /* NEW: Base glow filter (Subtle, permanent glow) */
+      filter: brightness(1.1) drop-shadow(0 0 2px rgba(255, 255, 255, 0.15)); 
     }
 
     .logo-top {
@@ -95,10 +97,10 @@
     }
 
     .logo-bottom {
-      margin-top: -31px;            /* INITIAL POSITION: static overlap (how connected they are) */
+      margin-top: -31px;
       animation: 
-        logo-fade-in 0.5s ease-out 0.3s forwards,
-        logo-separate 0.8s ease-out 0.4s forwards;
+        logo-fade-in 0.4s ease-out 0.3s forwards,
+        logo-separate 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.7s forwards;
     }
 
     @keyframes logo-fade-in {
@@ -108,7 +110,44 @@
 
     @keyframes logo-separate {
       0% { transform: translateY(0); }
-      100% { transform: translateY(7px); }   /* SEPARATION: how far bottom moves down */
+      100% { transform: translateY(7px); }
+    }
+
+    /* Logo hover glow effect */
+    .logo-mark.near .logo-top,
+    .logo-mark.near .logo-bottom {
+      filter: brightness(1.3) drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
+    }
+
+    /* Logo pulse effect */
+    .logo-pulse {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      transform: translate(-50%, -50%);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .logo-pulse.active {
+      animation: logo-pulse-expand 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes logo-pulse-expand {
+      0% {
+        width: 20px;
+        height: 20px;
+        opacity: 0.8;
+      }
+      100% {
+        width: 120px;
+        height: 120px;
+        opacity: 0;
+      }
     }
 
     @media (max-width: 768px) {
@@ -120,7 +159,7 @@
         width: 32px;
       }
       .logo-bottom {
-        margin-top: -16px;
+        margin-top: -21px;
       }
       @keyframes logo-separate {
         0% { transform: translateY(0); }
@@ -273,14 +312,18 @@
       flex-direction: column;
       align-items: center;
       gap: 8px;
-      transition: opacity 0.8s ease, transform 0.8s ease;
+      opacity: 0; /* Changed: Start at 0, controlled by JS */
       pointer-events: none;
+      /* Removed: animation: scroll-hint-appear 0.8s ease 0.9s forwards; */
+      transition: opacity 0.8s ease, transform 0.8s ease; /* Added transition for smooth JS control */
     }
 
-    .scroll-hint.hidden {
-      opacity: 0;
-      transform: translateX(-50%) translateY(20px);
+    @keyframes scroll-hint-appear {
+      0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+      100% { opacity: 1; transform: translateX(-50%) translateY(0); }
     }
+
+    /* Removed .scroll-hint.hidden class as logic is moved to JS inline styles */
 
     .scroll-hint span {
       color: rgba(255, 255, 255, 0.4);
@@ -714,10 +757,10 @@
   
   <div class="grain-overlay"></div>
   
-  <!-- Logo Animation -->
   <div class="logo-mark">
     <img src="./topchevronW.png" alt="" class="logo-top">
     <img src="./bottomchevronW.png" alt="" class="logo-bottom">
+    <div class="logo-pulse"></div>
   </div>
   <div class="scanlines"></div>
   <div class="vignette"></div>
@@ -818,6 +861,8 @@
       const progressDots = document.querySelectorAll('.progress-dot');
       const scrollHint = document.querySelector('.scroll-hint');
       const spotlight = document.querySelector('.cursor-spotlight');
+      const logoMark = document.querySelector('.logo-mark');
+      const logoPulse = document.querySelector('.logo-pulse');
 
       // STATE
       let activeSection = 0;
@@ -832,7 +877,6 @@
       const particles = [];
       
       function createParticles() {
-        // Skip particle creation on mobile for performance
         if (window.innerWidth <= 768) return;
         
         const container = document.getElementById('particles');
@@ -851,7 +895,6 @@
           particle.style.width = size + 'px';
           particle.style.height = size + 'px';
           
-          // Store particle data for animation
           particles.push({
             element: particle,
             x: x,
@@ -870,37 +913,31 @@
       
       // --- PARTICLE ANIMATION WITH MOUSE INTERACTION ---
       function animateParticles(time) {
-        const mouseInfluenceRadius = 250; // pixels
-        const maxMouseBoost = 0.5; // max additional opacity from mouse
+        const mouseInfluenceRadius = 250;
+        const maxMouseBoost = 0.5;
         
         particles.forEach(p => {
-          // Calculate twinkle (sine wave)
           const twinkle = (Math.sin(time * 0.001 * p.twinkleSpeed + p.twinkleOffset) + 1) / 2;
           const twinkleOpacity = twinkle * p.baseOpacity;
           
-          // Calculate mouse distance
           const particleX = (p.x / 100) * window.innerWidth;
           const particleY = (p.y / 100) * window.innerHeight;
           const dx = mouseX - particleX;
           const dy = mouseY - particleY;
           const distance = Math.sqrt(dx * dx + dy * dy);
           
-          // Calculate mouse influence (closer = brighter)
           let mouseBoost = 0;
           if (distance < mouseInfluenceRadius) {
             const influence = 1 - (distance / mouseInfluenceRadius);
-            // Ease the influence for a smoother falloff
             mouseBoost = influence * influence * maxMouseBoost;
           }
           
-          // Combine twinkle and mouse boost
           const finalOpacity = Math.min(1, twinkleOpacity + mouseBoost);
           const scale = 0.5 + (twinkle * 0.5) + (mouseBoost * 0.3);
           
           p.element.style.opacity = finalOpacity;
           p.element.style.transform = `scale(${scale})`;
           
-          // Add subtle glow when mouse is very close
           if (mouseBoost > 0.2) {
             p.element.style.boxShadow = `0 0 ${mouseBoost * 8}px rgba(255, 255, 255, ${mouseBoost * 0.8})`;
           } else {
@@ -911,7 +948,6 @@
         requestAnimationFrame(animateParticles);
       }
       
-      // Only start particle animation if we have particles
       if (particles.length > 0) {
         requestAnimationFrame(animateParticles);
       }
@@ -919,6 +955,14 @@
       // --- 1. INITIALIZATION ---
       window.addEventListener('load', () => {
         sectionContents[0].classList.add('visible');
+
+        // New: Initial fade-in for scroll hint after 1.8 seconds (after main text animation)
+        setTimeout(() => {
+            if (activeSection === 0) {
+                scrollHint.style.opacity = 1;
+                scrollHint.style.transform = 'translateX(-50%) translateY(0)';
+            }
+        }, 1800);
       });
 
       // --- 2. SMOOTH MOUSE SPOTLIGHT ---
@@ -942,6 +986,35 @@
         requestAnimationFrame(animateSpotlight);
       }
       animateSpotlight();
+
+      // --- LOGO INTERACTIVITY ---
+      function checkLogoProximity() {
+        const logoRect = logoMark.getBoundingClientRect();
+        const logoCenterX = logoRect.left + logoRect.width / 2;
+        const logoCenterY = logoRect.top + logoRect.height / 2;
+        
+        const dx = mouseX - logoCenterX;
+        const dy = mouseY - logoCenterY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < 100) {
+          logoMark.classList.add('near');
+        } else {
+          logoMark.classList.remove('near');
+        }
+        
+        requestAnimationFrame(checkLogoProximity);
+      }
+      
+      if (window.innerWidth > 768) {
+        checkLogoProximity();
+      }
+      
+      logoMark.addEventListener('click', () => {
+        logoPulse.classList.remove('active');
+        void logoPulse.offsetWidth;
+        logoPulse.classList.add('active');
+      });
 
       // --- 3. CUSTOM SCROLL ENGINE ---
       const scrollSmoothly = (element, targetY, duration) => {
@@ -1011,10 +1084,15 @@
           }
         });
 
+        // Updated Scroll Hint Logic
         if (activeSection > 0) {
-          scrollHint.classList.add('hidden');
+            // Fade out
+            scrollHint.style.opacity = 0;
+            scrollHint.style.transform = 'translateX(-50%) translateY(20px)';
         } else {
-          scrollHint.classList.remove('hidden');
+            // Fade in
+            scrollHint.style.opacity = 1;
+            scrollHint.style.transform = 'translateX(-50%) translateY(0)';
         }
       }
 
@@ -1067,14 +1145,12 @@
       const rings = document.querySelectorAll('.ring');
       
       function animateParallax() {
-        // Calculate mouse offset from center (normalized -1 to 1)
         const centerX = window.innerWidth / 2;
         const centerY = window.innerHeight / 2;
         const offsetX = (mouseX - centerX) / centerX;
         const offsetY = (mouseY - centerY) / centerY;
         
         rings.forEach((ring, index) => {
-          // Inner rings move more, outer rings move less (creates depth)
           const strength = [8, 5, 2][index] || 4;
           const translateX = offsetX * strength;
           const translateY = offsetY * strength;
@@ -1085,7 +1161,6 @@
         requestAnimationFrame(animateParallax);
       }
       
-      // Only run parallax on desktop
       if (window.innerWidth > 768) {
         animateParallax();
       }
@@ -1095,7 +1170,6 @@
       const waveCtx = waveformCanvas.getContext('2d');
       
       function resizeWaveform() {
-        const container = waveformCanvas.parentElement;
         const dpr = window.devicePixelRatio || 1;
         waveformCanvas.width = window.innerWidth * dpr;
         waveformCanvas.height = 60 * dpr;
@@ -1112,13 +1186,10 @@
         const height = 60;
         const centerY = height / 2;
         
-        // Clear canvas
         waveCtx.clearRect(0, 0, width, height);
         
-        // Calculate mouse influence (normalized 0-1 across screen width)
         const mouseNormX = mouseX / width;
         
-        // Draw multiple wave layers for depth
         const waves = [
           { amplitude: 5, frequency: 0.008, speed: 0.0008, opacity: 0.4 },
           { amplitude: 3.5, frequency: 0.012, speed: 0.0012, opacity: 0.25 },
@@ -1130,23 +1201,15 @@
           waveCtx.moveTo(0, centerY);
           
           for (let x = 0; x <= width; x++) {
-            // Distance from mouse (0 at mouse, 1 at edges)
             const distFromMouse = Math.abs((x / width) - mouseNormX);
             const mouseInfluence = Math.max(0, 1 - distFromMouse * 2.5);
             
-            // Breathing envelope - moves opposite direction (negative time)
-            // Creates amplitude variation that travels right to left while waves go left to right
             const breatheSpeed = 0.0004;
             const breatheFrequency = 0.003;
             const breathe = 0.5 + 0.5 * Math.sin(x * breatheFrequency - time * breatheSpeed + waveIndex * 0.5);
             
-            // Base wave
             const baseWave = Math.sin(x * wave.frequency + time * wave.speed);
-            
-            // Secondary modulation for organic feel
             const modulation = Math.sin(x * wave.frequency * 0.5 + time * wave.speed * 0.7) * 0.5;
-            
-            // Amplitude combines breathing and mouse influence
             const dynamicAmplitude = wave.amplitude * breathe * (1 + mouseInfluence * 1.5);
             
             const y = centerY + (baseWave + modulation) * dynamicAmplitude;
@@ -1159,7 +1222,6 @@
           waveCtx.stroke();
         });
         
-        // Draw center line (very subtle)
         waveCtx.beginPath();
         waveCtx.moveTo(0, centerY);
         waveCtx.lineTo(width, centerY);

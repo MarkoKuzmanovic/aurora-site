@@ -71,6 +71,63 @@
       90% { transform: translate(-1%, -1%); }
     }
 
+    /* LOGO ANIMATION */
+    .logo-mark {
+      position: fixed;
+      top: 32px;                    /* POSITION: distance from top */
+      left: 40px;                   /* POSITION: distance from left */
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .logo-top, .logo-bottom {
+      width: 48px;                  /* SCALE: width of chevrons */
+      height: auto;
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+
+    .logo-top {
+      animation: logo-fade-in 0.4s ease-out 0.3s forwards;
+    }
+
+    .logo-bottom {
+      margin-top: -31px;            /* INITIAL POSITION: static overlap (how connected they are) */
+      animation: 
+        logo-fade-in 0.5s ease-out 0.3s forwards,
+        logo-separate 0.8s ease-out 0.4s forwards;
+    }
+
+    @keyframes logo-fade-in {
+      0% { opacity: 0; }
+      100% { opacity: 0.9; }
+    }
+
+    @keyframes logo-separate {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(7px); }   /* SEPARATION: how far bottom moves down */
+    }
+
+    @media (max-width: 768px) {
+      .logo-mark {
+        top: 20px;
+        left: 20px;
+      }
+      .logo-top, .logo-bottom {
+        width: 32px;
+      }
+      .logo-bottom {
+        margin-top: -16px;
+      }
+      @keyframes logo-separate {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(5px); }
+      }
+    }
+
     /* AURORA BACKGROUND - More subtle */
     .aurora-container {
       position: fixed;
@@ -656,6 +713,12 @@
 <body>
   
   <div class="grain-overlay"></div>
+  
+  <!-- Logo Animation -->
+  <div class="logo-mark">
+    <img src="./topchevronW.png" alt="" class="logo-top">
+    <img src="./bottomchevronW.png" alt="" class="logo-bottom">
+  </div>
   <div class="scanlines"></div>
   <div class="vignette"></div>
   

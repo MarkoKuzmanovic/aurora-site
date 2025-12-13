@@ -4,6 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Aurora Corporation</title>
+  <meta name="description" content="Per aspera ad astra. Something is coming.">
+  <meta name="theme-color" content="#030308">
+  
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
+  <link rel="manifest" href="/site.webmanifest">
+  
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="The Aurora Corporation">
+  <meta property="og:description" content="Per aspera ad astra. Something is coming.">
+  <meta property="og:image" content="/android-chrome-512x512.png">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="The Aurora Corporation">
+  <meta name="twitter:description" content="Per aspera ad astra. Something is coming.">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@200;400&display=swap" rel="stylesheet">
@@ -16,25 +37,126 @@
 
     html, body {
       height: 100%;
-      width: 100%; /* Ensure full width for centering */
+      width: 100%;
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      background: #050505; /* Set background to match previous changes */
+      background: #030308;
       color: #fff;
-      overflow: hidden; /* Custom scroll engine */
+      overflow: hidden;
     }
 
-    /* VIBE & EFFECTS (Restored from the version with fixes) */
-    
+    /* FILM GRAIN OVERLAY - Finer grain, more subtle */
+    .grain-overlay {
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.018;
+      pointer-events: none;
+      z-index: 1000;
+      animation: grain 0.4s steps(1) infinite;
+    }
+
+    @keyframes grain {
+      0%, 100% { transform: translate(0, 0); }
+      10% { transform: translate(-1%, -1%); }
+      20% { transform: translate(1%, 1%); }
+      30% { transform: translate(-0.5%, 0.5%); }
+      40% { transform: translate(0.5%, -0.5%); }
+      50% { transform: translate(-1%, 1%); }
+      60% { transform: translate(1%, -1%); }
+      70% { transform: translate(-0.5%, -0.5%); }
+      80% { transform: translate(0.5%, 0.5%); }
+      90% { transform: translate(-1%, -1%); }
+    }
+
+    /* AURORA BACKGROUND - More subtle */
+    .aurora-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .aurora {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      top: -50%;
+      left: -50%;
+      background: 
+        radial-gradient(ellipse 80% 50% at 20% 40%, rgba(0, 255, 180, 0.055) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 70% 60%, rgba(100, 0, 255, 0.04) 0%, transparent 50%),
+        radial-gradient(ellipse 90% 60% at 50% 30%, rgba(0, 150, 255, 0.035) 0%, transparent 50%);
+      animation: aurora-drift 20s ease-in-out infinite;
+      filter: blur(60px);
+    }
+
+    .aurora-2 {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      top: -30%;
+      left: -30%;
+      background: 
+        radial-gradient(ellipse 70% 50% at 80% 50%, rgba(0, 255, 150, 0.04) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 60% at 30% 70%, rgba(150, 0, 255, 0.035) 0%, transparent 50%);
+      animation: aurora-drift-2 25s ease-in-out infinite;
+      filter: blur(80px);
+    }
+
+    @keyframes aurora-drift {
+      0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+      25% { transform: translate(5%, 3%) rotate(2deg) scale(1.05); }
+      50% { transform: translate(-3%, 5%) rotate(-1deg) scale(0.98); }
+      75% { transform: translate(-5%, -3%) rotate(1deg) scale(1.02); }
+    }
+
+    @keyframes aurora-drift-2 {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      33% { transform: translate(-5%, 5%) rotate(-2deg); }
+      66% { transform: translate(5%, -3%) rotate(2deg); }
+    }
+
+    /* PARTICLE STAR FIELD - More subtle */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: #fff;
+      border-radius: 50%;
+      opacity: 0;
+      transition: box-shadow 0.3s ease;
+    }
+
+    /* CURSOR SPOTLIGHT */
     .cursor-spotlight {
       position: fixed;
       top: 0;
       left: 0;
-      width: 800px;
-      height: 800px;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.015) 0%, transparent 60%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, 
+        rgba(100, 200, 255, 0.02) 0%, 
+        rgba(150, 100, 255, 0.01) 30%,
+        transparent 60%);
       transform: translate(-50%, -50%);
       pointer-events: none;
-      z-index: 1;
+      z-index: 2;
       transition: opacity 0.5s ease;
     }
 
@@ -42,11 +164,10 @@
       position: relative;
       width: 100%;
       height: 100vh;
-      z-index: 2;
+      z-index: 10;
     }
 
     /* NAVIGATION */
-    
     .progress-indicator {
       position: fixed;
       right: 40px;
@@ -66,7 +187,7 @@
       cursor: pointer;
       position: relative;
       border-radius: 2px;
-      transition: background 0.3s ease;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
     }
 
     .progress-dot::before {
@@ -85,7 +206,6 @@
     }
 
     /* SCROLL HINT */
-
     .scroll-hint {
       position: fixed;
       bottom: 32px;
@@ -128,7 +248,6 @@
     }
 
     /* MAIN CONTENT */
-
     .scroll-container {
       width: 100%;
       height: 100%;
@@ -158,10 +277,17 @@
     }
 
     /* INTRO */
-
     .intro-content {
       text-align: center;
       z-index: 10;
+    }
+
+    .intro-content p {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 13px;
+      letter-spacing: 0.6em;
+      text-transform: uppercase;
+      font-family: monospace;
     }
 
     .intro-content h1 {
@@ -176,28 +302,53 @@
       line-height: 1.1;
     }
 
+    .intro-content h1 span {
+      display: inline-block;
+      opacity: 0;
+      animation: letter-reveal 0.6s ease forwards;
+    }
+
+    @keyframes letter-reveal {
+      0% { 
+        opacity: 0; 
+        transform: translateY(20px) rotateX(-90deg);
+        filter: blur(10px);
+      }
+      100% { 
+        opacity: 1; 
+        transform: translateY(0) rotateX(0);
+        filter: blur(0);
+      }
+    }
+
     .intro-divider {
       margin: 24px auto;
       height: 1px;
-      width: 120px;
+      width: 0;
       background: linear-gradient(to right, transparent, #fff, transparent);
       opacity: 0.6;
+      animation: divider-expand 1s ease 1.2s forwards;
     }
 
-    .intro-content p {
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 13px;
-      letter-spacing: 0.6em;
-      text-transform: uppercase;
-      font-family: monospace;
+    @keyframes divider-expand {
+      to { width: 120px; }
+    }
+
+    .intro-content > p:last-of-type {
+      opacity: 0;
+      animation: fade-in 1s ease 1.5s forwards;
+    }
+
+    @keyframes fade-in {
+      to { opacity: 1; }
     }
 
     /* IDENTITY */
-
     .identity-content {
       max-width: 800px;
       margin: 0 auto;
       width: 100%;
+      position: relative;
     }
 
     .identity-content .tagline {
@@ -208,31 +359,39 @@
       text-align: center;
       font-weight: 200;
       font-family: 'Atkinson Hyperlegible Mono', monospace;
-      margin-bottom: 64px;
+      margin-bottom: 32px;
       text-shadow: 0 0 15px rgba(255,255,255,0.2);
+    }
+
+    .waveform-container {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%) translateY(-15px);
+      width: 100vw;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, white 15%, white 85%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, white 15%, white 85%, transparent 100%);
+    }
+
+    .waveform-canvas {
+      width: 100%;
+      height: 100%;
     }
 
     .identity-stats {
       display: flex;
       justify-content: center;
       gap: clamp(40px, 10vw, 120px);
-      border-top: 1px solid rgba(255,255,255,0.1);
-      padding-top: 48px;
+      padding-top: 64px;
     }
 
     .stat {
       text-align: center;
       position: relative;
-    }
-
-    .stat::after {
-      content: '';
-      position: absolute;
-      top: -53px;
-      left: 50%;
-      width: 1px;
-      height: 10px;
-      background: rgba(255,255,255,0.3);
     }
 
     .stat-label {
@@ -250,8 +409,12 @@
       font-family: 'Atkinson Hyperlegible Mono', monospace;
     }
 
-    /* SIGNAL */
+    .stat-value.status-awake {
+      color: rgba(100, 255, 180, 0.9);
+      text-shadow: 0 0 10px rgba(100, 255, 180, 0.4);
+    }
 
+    /* SIGNAL */
     .signal-content {
       text-align: center;
       position: relative;
@@ -281,6 +444,8 @@
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 50%;
       animation: ping 4s cubic-bezier(0, 0, 0.2, 1) infinite;
+      transition: translate 0.15s ease-out;
+      will-change: scale, translate;
     }
 
     .ring:nth-child(1) { width: 200px; height: 200px; }
@@ -288,9 +453,9 @@
     .ring:nth-child(3) { width: 500px; height: 500px; animation-delay: 2s; border-color: rgba(255,255,255,0.04); }
 
     @keyframes ping {
-      0% { transform: scale(0.8); opacity: 0; }
+      0% { scale: 0.8; opacity: 0; }
       20% { opacity: 1; }
-      100% { transform: scale(1.4); opacity: 0; }
+      100% { scale: 1.4; opacity: 0; }
     }
 
     .signal-text {
@@ -319,23 +484,35 @@
     .signal-dot {
       width: 6px;
       height: 6px;
-      background: #fff;
-      opacity: 0.2;
+      background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.4) 50%, transparent 70%);
+      border-radius: 50%;
+      opacity: 0.3;
     }
 
-    .signal-dot:nth-child(1) { animation: flash 2s infinite; }
-    .signal-dot:nth-child(2) { animation: flash 2s infinite 0.2s; }
-    .signal-dot:nth-child(3) { animation: flash 2s infinite 0.4s; }
+    .signal-dot:nth-child(1) { 
+      width: 5px; 
+      height: 5px;
+      animation: breathe 3s ease-in-out infinite; 
+    }
+    .signal-dot:nth-child(2) { 
+      width: 7px; 
+      height: 7px;
+      animation: breathe 3s ease-in-out infinite 0.8s; 
+    }
+    .signal-dot:nth-child(3) { 
+      width: 5px; 
+      height: 5px;
+      animation: breathe 3s ease-in-out infinite 1.6s; 
+    }
 
-    @keyframes flash {
-      0%, 100% { opacity: 0.2; transform: scale(1); }
-      10% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px #fff; }
+    @keyframes breathe {
+      0%, 100% { opacity: 0.2; transform: scale(0.8); }
+      50% { opacity: 0.8; transform: scale(1.1); filter: blur(0.5px); }
     }
 
     /* Section 4: Contact */
-
     .contact-content {
-      text-align: center; /* Ensures inline-block child is centered */
+      text-align: center;
       width: auto;
       max-width: none;
       margin: 0 auto;
@@ -349,9 +526,8 @@
       margin-bottom: 48px;
     }
 
-    /* EMAIL STYLES - Centering Fix */
     .contact-email {
-      display: inline-block; /* Crucial for centering a block around its content */
+      display: inline-block;
       text-align: center;
       color: #fff;
       font-size: clamp(20px, 5vw, 32px);
@@ -391,7 +567,6 @@
       position: relative;
     }
 
-    /* INVISIBLE HIT BOX for easier clicking */
     .social-links a::before {
       content: '';
       position: absolute;
@@ -403,7 +578,6 @@
       cursor: pointer;
     }
 
-    /* Visual underline effect */
     .social-links a::after {
       content: '';
       position: absolute;
@@ -433,6 +607,37 @@
       font-family: monospace;
     }
 
+    /* SCANLINES OVERLAY */
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.03) 0px,
+        rgba(0, 0, 0, 0.03) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      opacity: 0.4;
+    }
+
+    /* VIGNETTE */
+    .vignette {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 998;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.4) 100%);
+    }
+
     @media (max-width: 768px) {
       .intro-content h1 { letter-spacing: 0.15em; }
       .identity-stats { flex-direction: column; gap: 32px; }
@@ -442,10 +647,24 @@
       .cursor-spotlight { display: none; }
       .contact-email { font-size: 16px; padding: 16px 20px; }
       .social-links { gap: 32px; }
+      .aurora, .aurora-2 { filter: blur(40px); }
+      .scanlines { display: none; }
+      .particles { display: none; }
     }
   </style>
 </head>
 <body>
+  
+  <div class="grain-overlay"></div>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+  
+  <div class="aurora-container">
+    <div class="aurora"></div>
+    <div class="aurora-2"></div>
+  </div>
+
+  <div class="particles" id="particles"></div>
   
   <div class="cursor-spotlight"></div>
 
@@ -464,9 +683,9 @@
 
     <div class="scroll-container">
       <section id="intro">
-        <div class="section-content intro-content">
-          <p class="intro-the">The</p>
-          <h1>Aurora</h1>
+        <div class="section-content intro-content visible">
+          <p>The</p>
+          <h1><span style="animation-delay: 0.1s">A</span><span style="animation-delay: 0.15s">u</span><span style="animation-delay: 0.2s">r</span><span style="animation-delay: 0.25s">o</span><span style="animation-delay: 0.3s">r</span><span style="animation-delay: 0.35s">a</span></h1>
           <div class="intro-divider"></div>
           <p>Corporation</p>
         </div>
@@ -474,7 +693,10 @@
 
       <section id="identity">
         <div class="section-content identity-content">
-          <p class="tagline">Per aspera ad astra.</p>
+          <p class="tagline">"Per aspera ad astra."</p>
+          <div class="waveform-container">
+            <canvas class="waveform-canvas" id="waveform"></canvas>
+          </div>
           <div class="identity-stats">
             <div class="stat">
               <div class="stat-label">Founded</div>
@@ -486,7 +708,7 @@
             </div>
             <div class="stat">
               <div class="stat-label">Status</div>
-              <div class="stat-value">Awake</div>
+              <div class="stat-value status-awake">Awake</div>
             </div>
           </div>
         </div>
@@ -543,23 +765,122 @@
       let mouseX = 0;
       const dotStates = Array.from(progressDots).map(() => ({ currentHeight: 32, targetHeight: 32 }));
 
-      // --- 1. INITIALIZATION ---
+      // --- PARTICLE GENERATION - Disabled on mobile ---
+      const particles = [];
       
+      function createParticles() {
+        // Skip particle creation on mobile for performance
+        if (window.innerWidth <= 768) return;
+        
+        const container = document.getElementById('particles');
+        const particleCount = 60;
+        
+        for (let i = 0; i < particleCount; i++) {
+          const particle = document.createElement('div');
+          particle.className = 'particle';
+          
+          const x = Math.random() * 100;
+          const y = Math.random() * 100;
+          particle.style.left = x + '%';
+          particle.style.top = y + '%';
+          
+          const size = 1 + Math.random() * 1.5;
+          particle.style.width = size + 'px';
+          particle.style.height = size + 'px';
+          
+          // Store particle data for animation
+          particles.push({
+            element: particle,
+            x: x,
+            y: y,
+            baseOpacity: 0.15 + Math.random() * 0.35,
+            twinkleSpeed: 0.3 + Math.random() * 0.4,
+            twinkleOffset: Math.random() * Math.PI * 2,
+            size: size
+          });
+          
+          container.appendChild(particle);
+        }
+      }
+      
+      createParticles();
+      
+      // --- PARTICLE ANIMATION WITH MOUSE INTERACTION ---
+      function animateParticles(time) {
+        const mouseInfluenceRadius = 250; // pixels
+        const maxMouseBoost = 0.5; // max additional opacity from mouse
+        
+        particles.forEach(p => {
+          // Calculate twinkle (sine wave)
+          const twinkle = (Math.sin(time * 0.001 * p.twinkleSpeed + p.twinkleOffset) + 1) / 2;
+          const twinkleOpacity = twinkle * p.baseOpacity;
+          
+          // Calculate mouse distance
+          const particleX = (p.x / 100) * window.innerWidth;
+          const particleY = (p.y / 100) * window.innerHeight;
+          const dx = mouseX - particleX;
+          const dy = mouseY - particleY;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          // Calculate mouse influence (closer = brighter)
+          let mouseBoost = 0;
+          if (distance < mouseInfluenceRadius) {
+            const influence = 1 - (distance / mouseInfluenceRadius);
+            // Ease the influence for a smoother falloff
+            mouseBoost = influence * influence * maxMouseBoost;
+          }
+          
+          // Combine twinkle and mouse boost
+          const finalOpacity = Math.min(1, twinkleOpacity + mouseBoost);
+          const scale = 0.5 + (twinkle * 0.5) + (mouseBoost * 0.3);
+          
+          p.element.style.opacity = finalOpacity;
+          p.element.style.transform = `scale(${scale})`;
+          
+          // Add subtle glow when mouse is very close
+          if (mouseBoost > 0.2) {
+            p.element.style.boxShadow = `0 0 ${mouseBoost * 8}px rgba(255, 255, 255, ${mouseBoost * 0.8})`;
+          } else {
+            p.element.style.boxShadow = 'none';
+          }
+        });
+        
+        requestAnimationFrame(animateParticles);
+      }
+      
+      // Only start particle animation if we have particles
+      if (particles.length > 0) {
+        requestAnimationFrame(animateParticles);
+      }
+
+      // --- 1. INITIALIZATION ---
       window.addEventListener('load', () => {
         sectionContents[0].classList.add('visible');
       });
 
       // --- 2. SMOOTH MOUSE SPOTLIGHT ---
+      let spotlightX = 0;
+      let spotlightY = 0;
+      let targetSpotlightX = 0;
+      let targetSpotlightY = 0;
 
       document.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
-        spotlight.style.left = mouseX + 'px';
-        spotlight.style.top = mouseY + 'px';
+        targetSpotlightX = mouseX;
+        targetSpotlightY = mouseY;
       });
 
+      function animateSpotlight() {
+        spotlightX += (targetSpotlightX - spotlightX) * 0.1;
+        spotlightY += (targetSpotlightY - spotlightY) * 0.1;
+        spotlight.style.left = spotlightX + 'px';
+        spotlight.style.top = spotlightY + 'px';
+        requestAnimationFrame(animateSpotlight);
+      }
+      animateSpotlight();
+
       // --- 3. CUSTOM SCROLL ENGINE ---
-      
       const scrollSmoothly = (element, targetY, duration) => {
         const startY = element.scrollTop;
         const change = targetY - startY;
@@ -568,12 +889,8 @@
         const animateScroll = (currentTime) => {
           const time = currentTime - startTime;
           const progress = Math.min(1, time / duration);
-          
-          // Cubic Bezier easing for a smooth feel
           const ease = progress < 0.5 ? 4 * progress * progress * progress : (progress - 1) * (2 * progress - 2) * (2 * progress - 2) + 1;
-
           element.scrollTop = startY + change * ease;
-          
           if (progress < 1) {
             requestAnimationFrame(animateScroll);
           }
@@ -584,15 +901,11 @@
 
       window.addEventListener('wheel', (e) => {
         if (window.innerWidth <= 768) return;
-
         e.preventDefault();
-        
         const now = Date.now();
         if (now - lastScrollTime < 800) return;
-        
         const direction = e.deltaY > 0 ? 1 : -1;
         scrollToSection(activeSection + direction);
-        
         lastScrollTime = now;
       }, { passive: false });
 
@@ -612,13 +925,9 @@
 
       function scrollToSection(index) {
         if (index < 0 || index >= sections.length) return;
-        
         activeSection = index;
-        
-        // Use custom scroll function to target the section position
         const targetY = sections[index].offsetTop;
         scrollSmoothly(scrollContainer, targetY, 800);
-        
         updateSectionStates();
       }
 
@@ -647,7 +956,6 @@
       }
 
       // --- 4. CLICK NAVIGATION ---
-
       progressDots.forEach((dot, index) => {
         dot.addEventListener('click', () => {
           scrollToSection(index);
@@ -655,7 +963,6 @@
       });
 
       // --- 5. SMOOTH DOT HOVER ANIMATION (LERP) ---
-      
       const lerp = (start, end, factor) => start + (end - start) * factor;
 
       function animateDots() {
@@ -693,33 +1000,136 @@
 
       animateDots();
 
-      // Mobile native scroll listener (updates state on touch scroll)
-      scrollContainer.addEventListener('scroll', () => {
-        if (window.innerWidth > 768) return; // Only for mobile
+      // --- 6. PARALLAX RINGS EFFECT ---
+      const rings = document.querySelectorAll('.ring');
+      
+      function animateParallax() {
+        // Calculate mouse offset from center (normalized -1 to 1)
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        const offsetX = (mouseX - centerX) / centerX;
+        const offsetY = (mouseY - centerY) / centerY;
         
+        rings.forEach((ring, index) => {
+          // Inner rings move more, outer rings move less (creates depth)
+          const strength = [8, 5, 2][index] || 4;
+          const translateX = offsetX * strength;
+          const translateY = offsetY * strength;
+          
+          ring.style.translate = `${translateX}px ${translateY}px`;
+        });
+        
+        requestAnimationFrame(animateParallax);
+      }
+      
+      // Only run parallax on desktop
+      if (window.innerWidth > 768) {
+        animateParallax();
+      }
+
+      // --- 7. WAVEFORM ANIMATION ---
+      const waveformCanvas = document.getElementById('waveform');
+      const waveCtx = waveformCanvas.getContext('2d');
+      
+      function resizeWaveform() {
+        const container = waveformCanvas.parentElement;
+        const dpr = window.devicePixelRatio || 1;
+        waveformCanvas.width = window.innerWidth * dpr;
+        waveformCanvas.height = 60 * dpr;
+        waveCtx.scale(dpr, dpr);
+        waveformCanvas.style.width = window.innerWidth + 'px';
+        waveformCanvas.style.height = '60px';
+      }
+      
+      resizeWaveform();
+      window.addEventListener('resize', resizeWaveform);
+      
+      function drawWaveform(time) {
+        const width = window.innerWidth;
+        const height = 60;
+        const centerY = height / 2;
+        
+        // Clear canvas
+        waveCtx.clearRect(0, 0, width, height);
+        
+        // Calculate mouse influence (normalized 0-1 across screen width)
+        const mouseNormX = mouseX / width;
+        
+        // Draw multiple wave layers for depth
+        const waves = [
+          { amplitude: 5, frequency: 0.008, speed: 0.0008, opacity: 0.4 },
+          { amplitude: 3.5, frequency: 0.012, speed: 0.0012, opacity: 0.25 },
+          { amplitude: 2.5, frequency: 0.02, speed: 0.002, opacity: 0.15 }
+        ];
+        
+        waves.forEach((wave, waveIndex) => {
+          waveCtx.beginPath();
+          waveCtx.moveTo(0, centerY);
+          
+          for (let x = 0; x <= width; x++) {
+            // Distance from mouse (0 at mouse, 1 at edges)
+            const distFromMouse = Math.abs((x / width) - mouseNormX);
+            const mouseInfluence = Math.max(0, 1 - distFromMouse * 2.5);
+            
+            // Breathing envelope - moves opposite direction (negative time)
+            // Creates amplitude variation that travels right to left while waves go left to right
+            const breatheSpeed = 0.0004;
+            const breatheFrequency = 0.003;
+            const breathe = 0.5 + 0.5 * Math.sin(x * breatheFrequency - time * breatheSpeed + waveIndex * 0.5);
+            
+            // Base wave
+            const baseWave = Math.sin(x * wave.frequency + time * wave.speed);
+            
+            // Secondary modulation for organic feel
+            const modulation = Math.sin(x * wave.frequency * 0.5 + time * wave.speed * 0.7) * 0.5;
+            
+            // Amplitude combines breathing and mouse influence
+            const dynamicAmplitude = wave.amplitude * breathe * (1 + mouseInfluence * 1.5);
+            
+            const y = centerY + (baseWave + modulation) * dynamicAmplitude;
+            
+            waveCtx.lineTo(x, y);
+          }
+          
+          waveCtx.strokeStyle = `rgba(255, 255, 255, ${wave.opacity})`;
+          waveCtx.lineWidth = waveIndex === 0 ? 1 : 0.5;
+          waveCtx.stroke();
+        });
+        
+        // Draw center line (very subtle)
+        waveCtx.beginPath();
+        waveCtx.moveTo(0, centerY);
+        waveCtx.lineTo(width, centerY);
+        waveCtx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+        waveCtx.lineWidth = 1;
+        waveCtx.stroke();
+        
+        requestAnimationFrame(drawWaveform);
+      }
+      
+      requestAnimationFrame(drawWaveform);
+
+      // Mobile native scroll listener
+      scrollContainer.addEventListener('scroll', () => {
+        if (window.innerWidth > 768) return;
         const scrollTop = scrollContainer.scrollTop;
         const sectionHeight = window.innerHeight;
         const newActive = Math.round(scrollTop / sectionHeight);
-        
         if (newActive !== activeSection) {
           activeSection = newActive;
           updateSectionStates();
         }
       });
       
-      // Update state on resize for correct active section calculation
       window.addEventListener('resize', () => {
-          // Re-calculate the current active section after a resize
           const scrollTop = scrollContainer.scrollTop;
           const sectionHeight = window.innerHeight;
           const newActive = Math.round(scrollTop / sectionHeight);
-          
           if (newActive !== activeSection) {
               activeSection = newActive;
               updateSectionStates();
           }
       });
-
 
     })();
   </script>

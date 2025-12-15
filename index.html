@@ -42,7 +42,7 @@
       overflow: hidden;
     }
 
-    /* FILM GRAIN OVERLAY - Finer grain, more subtle */
+    /* FILM GRAIN OVERLAY */
     .grain-overlay {
       position: fixed;
       top: -50%;
@@ -88,7 +88,6 @@
       opacity: 0;
       will-change: transform, opacity;
       transition: filter 0.3s ease;
-      /* NEW: Base glow filter (Subtle, permanent glow) */
       filter: brightness(1.1) drop-shadow(0 0 2px rgba(255, 255, 255, 0.15)); 
     }
 
@@ -113,13 +112,11 @@
       100% { transform: translateY(7px); }
     }
 
-    /* Logo hover glow effect */
     .logo-mark.near .logo-top,
     .logo-mark.near .logo-bottom {
       filter: brightness(1.3) drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
     }
 
-    /* Logo pulse effect */
     .logo-pulse {
       position: absolute;
       top: 50%;
@@ -138,36 +135,21 @@
     }
 
     @keyframes logo-pulse-expand {
-      0% {
-        width: 20px;
-        height: 20px;
-        opacity: 0.8;
-      }
-      100% {
-        width: 120px;
-        height: 120px;
-        opacity: 0;
-      }
+      0% { width: 20px; height: 20px; opacity: 0.8; }
+      100% { width: 120px; height: 120px; opacity: 0; }
     }
 
     @media (max-width: 768px) {
-      .logo-mark {
-        top: 20px;
-        left: 20px;
-      }
-      .logo-top, .logo-bottom {
-        width: 32px;
-      }
-      .logo-bottom {
-        margin-top: -21px;
-      }
+      .logo-mark { top: 20px; left: 20px; }
+      .logo-top, .logo-bottom { width: 32px; }
+      .logo-bottom { margin-top: -21px; }
       @keyframes logo-separate {
         0% { transform: translateY(0); }
         100% { transform: translateY(5px); }
       }
     }
 
-    /* AURORA BACKGROUND - More subtle */
+    /* AURORA BACKGROUND */
     .aurora-container {
       position: fixed;
       top: 0;
@@ -218,7 +200,7 @@
       66% { transform: translate(5%, -3%) rotate(2deg); }
     }
 
-    /* PARTICLE STAR FIELD - More subtle */
+    /* PARTICLE STAR FIELD */
     .particles {
       position: fixed;
       top: 0;
@@ -312,18 +294,10 @@
       flex-direction: column;
       align-items: center;
       gap: 8px;
-      opacity: 0; /* Changed: Start at 0, controlled by JS */
+      opacity: 0;
       pointer-events: none;
-      /* Removed: animation: scroll-hint-appear 0.8s ease 0.9s forwards; */
-      transition: opacity 0.8s ease, transform 0.8s ease; /* Added transition for smooth JS control */
+      transition: opacity 0.8s ease, transform 0.8s ease;
     }
-
-    @keyframes scroll-hint-appear {
-      0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
-      100% { opacity: 1; transform: translateX(-50%) translateY(0); }
-    }
-
-    /* Removed .scroll-hint.hidden class as logic is moved to JS inline styles */
 
     .scroll-hint span {
       color: rgba(255, 255, 255, 0.4);
@@ -482,36 +456,98 @@
       height: 100%;
     }
 
-    .identity-stats {
+    /* NAV BUTTONS */
+    .nav-buttons {
       display: flex;
       justify-content: center;
-      gap: clamp(40px, 10vw, 120px);
+      gap: clamp(24px, 5vw, 48px);
       padding-top: 64px;
     }
 
-    .stat {
-      text-align: center;
-      position: relative;
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
     }
 
-    .stat-label {
-      color: rgba(255, 255, 255, 0.4);
-      font-size: 11px;
+    .nav-label {
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 12px;
       letter-spacing: 0.3em;
       text-transform: uppercase;
-      margin-bottom: 12px;
     }
 
-    .stat-value {
-      color: #fff;
-      font-size: 24px;
-      font-weight: 200;
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 180px;
+      height: 52px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
       font-family: 'Atkinson Hyperlegible Mono', monospace;
+      text-decoration: none;
+      padding: 0 24px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: transparent;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
     }
 
-    .stat-value.status-awake {
-      color: rgba(100, 255, 180, 0.9);
-      text-shadow: 0 0 10px rgba(100, 255, 180, 0.4);
+    .nav-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: -1;
+    }
+
+    .nav-btn:hover {
+      color: #000;
+      border-color: #fff;
+      text-shadow: none;
+    }
+
+    .nav-btn:hover::before {
+      transform: translateY(0);
+    }
+
+    .nav-btn.disabled {
+      cursor: default;
+      opacity: 0.4;
+    }
+
+    .nav-btn.disabled:hover {
+      color: rgba(255, 255, 255, 0.7);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-btn.disabled::before {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .nav-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+      }
+      
+      .nav-btn {
+        width: 200px;
+        height: 52px;
+      }
     }
 
     /* SIGNAL */
@@ -740,7 +776,6 @@
 
     @media (max-width: 768px) {
       .intro-content h1 { letter-spacing: 0.15em; }
-      .identity-stats { flex-direction: column; gap: 32px; }
       .progress-indicator { display: none; }
       .scroll-container { overflow-y: auto; scroll-snap-type: y mandatory; }
       section { scroll-snap-align: start; }
@@ -803,18 +838,18 @@
           <div class="waveform-container">
             <canvas class="waveform-canvas" id="waveform"></canvas>
           </div>
-          <div class="identity-stats">
-            <div class="stat">
-              <div class="stat-label">Founded</div>
-              <div class="stat-value">Unknown</div>
+          <div class="nav-buttons">
+            <div class="nav-item">
+              <div class="nav-label">Founded</div>
+              <span class="nav-btn disabled">About</span>
             </div>
-            <div class="stat">
-              <div class="stat-label">Projects</div>
-              <div class="stat-value">Pending</div>
+            <div class="nav-item">
+              <div class="nav-label">Projects</div>
+              <a href="https://thecosmodrome.space" class="nav-btn" target="_blank" rel="noopener">The Cosmodrome</a>
             </div>
-            <div class="stat">
-              <div class="stat-label">Status</div>
-              <div class="stat-value status-awake">Awake</div>
+            <div class="nav-item">
+              <div class="nav-label">Status</div>
+              <span class="nav-btn disabled">Blog</span>
             </div>
           </div>
         </div>
@@ -864,16 +899,12 @@
       const logoMark = document.querySelector('.logo-mark');
       const logoPulse = document.querySelector('.logo-pulse');
 
-      // STATE
       let activeSection = 0;
       let lastScrollTime = 0;
-      
-      // MOUSE TRACKING STATE
       let mouseY = 0;
       let mouseX = 0;
       const dotStates = Array.from(progressDots).map(() => ({ currentHeight: 32, targetHeight: 32 }));
 
-      // --- PARTICLE GENERATION - Disabled on mobile ---
       const particles = [];
       
       function createParticles() {
@@ -911,7 +942,6 @@
       
       createParticles();
       
-      // --- PARTICLE ANIMATION WITH MOUSE INTERACTION ---
       function animateParticles(time) {
         const mouseInfluenceRadius = 250;
         const maxMouseBoost = 0.5;
@@ -952,11 +982,8 @@
         requestAnimationFrame(animateParticles);
       }
 
-      // --- 1. INITIALIZATION ---
       window.addEventListener('load', () => {
         sectionContents[0].classList.add('visible');
-
-        // New: Initial fade-in for scroll hint after 1.8 seconds (after main text animation)
         setTimeout(() => {
             if (activeSection === 0) {
                 scrollHint.style.opacity = 1;
@@ -965,7 +992,6 @@
         }, 1800);
       });
 
-      // --- 2. SMOOTH MOUSE SPOTLIGHT ---
       let spotlightX = 0;
       let spotlightY = 0;
       let targetSpotlightX = 0;
@@ -987,7 +1013,6 @@
       }
       animateSpotlight();
 
-      // --- LOGO INTERACTIVITY ---
       function checkLogoProximity() {
         const logoRect = logoMark.getBoundingClientRect();
         const logoCenterX = logoRect.left + logoRect.width / 2;
@@ -1016,7 +1041,6 @@
         logoPulse.classList.add('active');
       });
 
-      // --- 3. CUSTOM SCROLL ENGINE ---
       const scrollSmoothly = (element, targetY, duration) => {
         const startY = element.scrollTop;
         const change = targetY - startY;
@@ -1084,26 +1108,21 @@
           }
         });
 
-        // Updated Scroll Hint Logic
         if (activeSection > 0) {
-            // Fade out
             scrollHint.style.opacity = 0;
             scrollHint.style.transform = 'translateX(-50%) translateY(20px)';
         } else {
-            // Fade in
             scrollHint.style.opacity = 1;
             scrollHint.style.transform = 'translateX(-50%) translateY(0)';
         }
       }
 
-      // --- 4. CLICK NAVIGATION ---
       progressDots.forEach((dot, index) => {
         dot.addEventListener('click', () => {
           scrollToSection(index);
         });
       });
 
-      // --- 5. SMOOTH DOT HOVER ANIMATION (LERP) ---
       const lerp = (start, end, factor) => start + (end - start) * factor;
 
       function animateDots() {
@@ -1141,7 +1160,6 @@
 
       animateDots();
 
-      // --- 6. PARALLAX RINGS EFFECT ---
       const rings = document.querySelectorAll('.ring');
       
       function animateParallax() {
@@ -1165,7 +1183,6 @@
         animateParallax();
       }
 
-      // --- 7. WAVEFORM ANIMATION ---
       const waveformCanvas = document.getElementById('waveform');
       const waveCtx = waveformCanvas.getContext('2d');
       
@@ -1234,7 +1251,6 @@
       
       requestAnimationFrame(drawWaveform);
 
-      // Mobile native scroll listener
       scrollContainer.addEventListener('scroll', () => {
         if (window.innerWidth > 768) return;
         const scrollTop = scrollContainer.scrollTop;
